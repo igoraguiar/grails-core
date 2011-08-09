@@ -32,6 +32,8 @@ import java.util.*;
 @SuppressWarnings("rawtypes")
 public class DefaultGrailsDomainClass extends AbstractGrailsClass implements GrailsDomainClass {
 
+    public static boolean checkVersionAndIdentifier = true;
+
     private GrailsDomainClassProperty identifier;
     private GrailsDomainClassProperty version;
     private GrailsDomainClassProperty[] properties;
@@ -93,13 +95,15 @@ public class DefaultGrailsDomainClass extends AbstractGrailsClass implements Gra
         // populating into a map
         populateDomainClassProperties(propertyDescriptors);
 
-        // if no identifier property throw exception
-        if (identifier == null) {
-            throw new GrailsDomainException("Identity property not found, but required in domain class ["+getFullName()+"]");
-        }
-        // if no version property throw exception
-        if (version == null) {
-            throw new GrailsDomainException("Version property not found, but required in domain class ["+getFullName()+"]");
+        if (checkVersionAndIdentifier) {
+            // if no identifier property throw exception
+            if (identifier == null) {
+                throw new GrailsDomainException("Identity property not found, but required in domain class ["+getFullName()+"]");
+            }
+            // if no version property throw exception
+            if (version == null) {
+                throw new GrailsDomainException("Version property not found, but required in domain class ["+getFullName()+"]");
+            }
         }
         // set properties from map values
         properties = propertyMap.values().toArray(new GrailsDomainClassProperty[propertyMap.size()]);
