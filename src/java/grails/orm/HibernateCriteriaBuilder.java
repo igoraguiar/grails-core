@@ -1139,9 +1139,13 @@ public class HibernateCriteriaBuilder extends GroovyObjectSupport {
                     criteria.setProjection(Projections.rowCount());
                     int totalCount = ((Integer)criteria.uniqueResult()).intValue();
 
-                    // Drop the projection, add settings for the pagination parameters,
+                    // Restore the previous projection, add settings for the pagination parameters,
                     // and then execute the query.
-                    criteria.setProjection(null);
+                    if (projectionList != null && projectionList.getLength() > 0) {
+                        criteria.setProjection(projectionList);
+                    } else {
+                        criteria.setProjection(null);
+                    }
                     for (Iterator<Order> it = orderEntries.iterator(); it.hasNext();) {
                         criteria.addOrder(it.next());
                     }
